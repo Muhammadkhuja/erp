@@ -15,12 +15,16 @@ import { Request, Response } from "express";
 import { TeacherService } from "../teacher/teacher.service";
 import { Teacher } from "../teacher/entities/teacher.entity";
 import { CreateTeacherDto } from "../teacher/dto/create-teacher.dto";
+import { StudentsService } from "../students/students.service";
+import { Student } from "../students/entities/student.entity";
+import { CreateStudentDto } from "../students/dto/create-student.dto";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly adminService: AdminService,
     private readonly teacherService: TeacherService,
+    private readonly studentService: StudentsService,
     private readonly jwtService: JwtService
   ) {}
 
@@ -52,6 +56,29 @@ export class AuthService {
       id: teacher.id,
       is_active: teacher.is_active,
       role: teacher.role,
+    };
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload, {
+        secret: process.env.ACCESS_TOKEN_KEY,
+        expiresIn: process.env.ACCESS_TOKEN_TIME,
+      }),
+      this.jwtService.signAsync(payload, {
+        secret: process.env.REFRESH_TOKEN_KEY,
+        expiresIn: process.env.REFRESH_TOKEN_TIME,
+      }),
+    ]);
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  //-------------------------------------------------------------------------------------------------
+
+  async StudentgenerateToken(student: Student) {
+    const payload = {
+      id: student.id,
+      is_active: student.is_active,
     };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
@@ -251,6 +278,104 @@ export class AuthService {
     const hashed_refresh_token = await bcrypt.hash(tokens.refreshToken, 7);
     teacher.refresh_token = hashed_refresh_token;
     await this.teacherService.update(teacher.id, teacher);
+
+    res.cookie("refresh_token", tokens.refreshToken, {
+      maxAge: Number(process.env.COOKIE_TIME),
+    });
+
+    return {
+      message: "Token refresh token ga o'zgardi ",
+      accessToken: tokens.accessToken,
+    };
+  }
+
+  //-------------------------------------------------------------------------------------------------
+
+  async singUpStudent(createStudentDto: CreateStudentDto) {
+    const candidate = await this.studentService.findStudentByEmail(
+      createStudentDto.email
+    );
+    if (candidate) {
+      throw new ConflictException("Bunday foydalanuvchi mavjud");
+    }
+    const newStudent = await this.studentService.create(createStudentDto);
+    return { message: "Foydalanuvchi qo'shildi", studentId: newStudent.id };
+  }
+
+  async singInStudent(singInDto: SingInDto, res: Response) {
+    const student = await this.studentService.findStudentByEmail(
+      singInDto.email
+    );
+
+    if (!student) {
+      throw new BadRequestException("Email yoki passwor hato");
+    }
+    const isValidPassword = await bcrypt.compare(
+      singInDto.password,
+      student.hashed_password
+    );
+
+    if (!isValidPassword) {
+      throw new BadRequestException("Email yoki passwor hato p ");
+    }
+    const tokens = await this.StudentgenerateToken(student);
+    res.cookie("refresh_token", tokens.refreshToken, {
+      httpOnly: true,
+      maxAge: Number(process.env.COOKIE_TIME),
+    });
+
+    try {
+      const hashed_refresh_token = await bcrypt.hash(tokens.refreshToken, 7);
+      student.refresh_token = hashed_refresh_token;
+      await this.studentService.update(student.id, student);
+    } catch (error) {
+      console.log("Token da xatolik !?!");
+    }
+
+    return {
+      message: "Tizimga hush kelibsiz",
+      accessToken: tokens.accessToken,
+    };
+  }
+
+  async singOutStudent(req: Request, res: Response) {
+    const refresh_token = req.cookies.refresh_token;
+
+    const student =
+      await this.studentService.findStudentByRefresh(refresh_token);
+
+    if (!student) {
+      throw new BadGatewayException("Token yoq yoki noto'g'ri");
+    }
+    student.refresh_token = "";
+    await this.studentService.update(student.id, student);
+
+    res.clearCookie("refresh_token");
+
+    return { message: "Siz endi yo'q siz !?" };
+  }
+
+  async StudentrefreshToken(req: Request, res: Response) {
+    const refresh_token = req.cookies["refresh_token"];
+    if (!refresh_token) {
+      throw new ForbiddenException("Refresh token yo'q");
+    }
+
+    const students = await this.studentService.findAll();
+    const student = students.find(
+      (student) =>
+        student.refresh_token &&
+        bcrypt.compareSync(refresh_token, student.refresh_token)
+    );
+
+    if (!student) {
+      throw new ForbiddenException("Refresh token noto'g'ri");
+    }
+
+    const tokens = await this.StudentgenerateToken(student);
+    const hashed_refresh_token = await bcrypt.hash(tokens.refreshToken, 7);
+    student.refresh_token = hashed_refresh_token;
+    await this.studentService.update(student.id, student);
 
     res.cookie("refresh_token", tokens.refreshToken, {
       maxAge: Number(process.env.COOKIE_TIME),

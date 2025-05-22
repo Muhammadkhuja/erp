@@ -1,9 +1,9 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
 @Entity()
-export class Admin {
+export class Student {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
@@ -37,6 +37,14 @@ export class Admin {
   is_active: boolean;
 
   @Field()
-  @Column({ default: true })
-  is_creator: boolean;
+  @Column()
+  gender: boolean;
+
+  @Field()
+  @CreateDateColumn()
+  datebirth: string;
+
+  @Field()
+  @Column()
+  avatarurl: string;
 }

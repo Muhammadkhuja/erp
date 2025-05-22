@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { CreateTeacherDto } from "./dto/create-teacher.dto";
-import { UpdateTeacherDto } from "./dto/update-teacher.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Teacher } from "./entities/teacher.entity";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
+import { UpdateTeacherDto } from "./dto/update-teacher.dto copy";
 
 @Injectable()
 export class TeacherService {

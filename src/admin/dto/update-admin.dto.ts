@@ -1,4 +1,17 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateAdminDto } from './create-admin.dto';
+import { Field, InputType } from "@nestjs/graphql";
 
-export class UpdateAdminDto extends PartialType(CreateAdminDto) {}
+@InputType()
+export class UpdateAdminDto {
+  @Field()
+  first_name?: string;
+  @Field()
+  last_name?: string;
+  @Field()
+  email?: string;
+  @Field()
+  phone?: string;
+  @Field()
+  password?: string;
+  @Field()
+  confirm_password?: string;
+}

@@ -1,0 +1,161 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Admin {
+  email: String!
+  first_name: String!
+  hashed_password: String!
+  id: ID!
+  is_active: Boolean!
+  is_creator: Boolean!
+  last_name: String!
+  phone: String!
+  refresh_token: String!
+}
+
+type Course {
+  description: String!
+  duration: Float!
+  id: ID!
+  lessonduration: Float!
+  lessonsinweel: Float!
+  price: String!
+  title: String!
+}
+
+input CreateAdminDto {
+  confirm_password: String!
+  email: String!
+  first_name: String!
+  last_name: String!
+  password: String!
+  phone: String!
+}
+
+input CreateCourseDto {
+  description: String!
+  duration: Float!
+  lessonduration: Float!
+  lessonsinweel: Float!
+  price: String!
+  title: String!
+}
+
+input CreateStudentDto {
+  avatarurl: String!
+  confirm_password: String!
+  datebirth: String!
+  email: String!
+  first_name: String!
+  gender: Boolean!
+  is_active: Boolean! = true
+  last_name: String!
+  password: String!
+  phone: String!
+  refresh_token: String
+}
+
+input CreateTeacherDto {
+  confirm_password: String!
+  email: String!
+  first_name: String!
+  last_name: String!
+  password: String!
+  phone: String!
+  role: String!
+}
+
+type Mutation {
+  createAdmin(createAdmin: CreateAdminDto!): Admin!
+  createCourse(createCourse: CreateCourseDto!): Course!
+  createStudent(createStudent: CreateStudentDto!): Student!
+  createTeachers(createTeacher: CreateTeacherDto!): Teacher!
+  removeAdmin(id: ID!): Float!
+  removeCourse(id: ID!): Float!
+  removeStudent(id: ID!): Float!
+  removeTeachers(id: ID!): Teacher!
+  updateAdmin(id: ID!, updateAdmin: UpdateAdminDto!): Admin!
+  updateCourse(id: ID!, updateCourse: UpdateCourseDto!): Course!
+  updateStudent(id: ID!, updateStudent: UpdateStudentDto!): Student!
+  updateTeachers(id: ID!, updateTeacher: UpdateTeacherDto!): Teacher!
+}
+
+type Query {
+  findAllAdmin: [Admin!]!
+  findAllCourse: [Course!]!
+  findAllStudent: [Student!]!
+  findAllTeachers: [Teacher!]!
+  findOneAdmin(id: Float!): Admin!
+  findOneCourse(id: Float!): Course!
+  findOneStudent(id: Float!): Student!
+  findOneTeachers(id: Float!): Teacher!
+}
+
+type Student {
+  avatarurl: String!
+  datebirth: String!
+  email: String!
+  first_name: String!
+  gender: Boolean!
+  hashed_password: String!
+  id: ID!
+  is_active: Boolean!
+  last_name: String!
+  phone: String!
+  refresh_token: String!
+}
+
+type Teacher {
+  email: String!
+  first_name: String!
+  hashed_password: String!
+  id: ID!
+  is_active: Boolean!
+  last_name: String!
+  phone: String!
+  refresh_token: String!
+  role: String!
+}
+
+input UpdateAdminDto {
+  confirm_password: String!
+  email: String!
+  first_name: String!
+  last_name: String!
+  password: String!
+  phone: String!
+}
+
+input UpdateCourseDto {
+  description: String!
+  duration: Float!
+  lessonduration: Float!
+  lessonsinweel: Float!
+  price: String!
+  title: String!
+}
+
+input UpdateStudentDto {
+  avatarurl: String
+  confirm_password: String
+  datebirth: String
+  email: String
+  first_name: String
+  gender: Boolean
+  is_active: Boolean = true
+  last_name: String
+  password: String
+  phone: String
+  refresh_token: String
+}
+
+input UpdateTeacherDto {
+  confirm_password: String
+  email: String
+  first_name: String
+  last_name: String
+  password: String
+  phone: String
+  role: String
+}

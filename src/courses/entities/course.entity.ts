@@ -3,40 +3,32 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
 @Entity()
-export class Teacher {
+export class Course {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
 
   @Field()
   @Column()
-  first_name: string;
+  title: string
 
   @Field()
   @Column()
-  last_name: string;
-
-  @Field()
-  @Column({ unique: true })
-  email: string;
+  description: string
 
   @Field()
   @Column()
-  phone: string;
+  price: string
 
   @Field()
   @Column()
-  hashed_password: string;
+  duration: number
 
   @Field()
   @Column()
-  role: string;
+  lessonsinweel: number
 
   @Field()
-  @Column({ default: true })
-  is_active: boolean;
-
-  @Field()
-  @Column({ nullable: true })
-  refresh_token: string;
+  @Column()
+  lessonduration: number
 }
