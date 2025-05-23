@@ -14,9 +14,18 @@ type Admin {
   refresh_token: String!
 }
 
+type Attendance {
+  date: String!
+  id: ID!
+  schudule_id: Schedule!
+  status: String!
+  student_id: Student!
+}
+
 type Course {
   description: String!
   duration: Float!
+  group: [Group!]!
   id: ID!
   lessonduration: Float!
   lessonsinweel: Float!
@@ -33,6 +42,13 @@ input CreateAdminDto {
   phone: String!
 }
 
+input CreateAttendanceDto {
+  date: String!
+  schudule_id: Int
+  status: String!
+  student_id: Int
+}
+
 input CreateCourseDto {
   description: String!
   duration: Float!
@@ -40,6 +56,21 @@ input CreateCourseDto {
   lessonsinweel: Float!
   price: String!
   title: String!
+}
+
+input CreateGroupDto {
+  course_id: Int
+  end_date: String!
+  name: String!
+  start_date: String!
+  status: String!
+}
+
+input CreateScheduleDto {
+  day_of_week: String!
+  end_time: String!
+  group_id: Int
+  start_time: String!
 }
 
 input CreateStudentDto {
@@ -66,33 +97,70 @@ input CreateTeacherDto {
   role: String!
 }
 
+type Group {
+  course_id: Course!
+  end_date: String!
+  id: ID!
+  name: String!
+  schedule: [Schedule!]!
+  start_date: String!
+  status: String!
+  studentgroup: [Studentgroup!]!
+  teachergroup: [Teachergroup!]!
+}
+
 type Mutation {
   createAdmin(createAdmin: CreateAdminDto!): Admin!
+  createAttendance(createAttendance: CreateAttendanceDto!): Attendance!
   createCourse(createCourse: CreateCourseDto!): Course!
+  createGroup(createGroup: CreateGroupDto!): Group!
+  createSchedule(createSchedule: CreateScheduleDto!): Schedule!
   createStudent(createStudent: CreateStudentDto!): Student!
   createTeachers(createTeacher: CreateTeacherDto!): Teacher!
   removeAdmin(id: ID!): Float!
+  removeAttendance(id: ID!): Float!
   removeCourse(id: ID!): Float!
+  removeGroup(id: ID!): Float!
+  removeSchedule(id: ID!): Float!
   removeStudent(id: ID!): Float!
   removeTeachers(id: ID!): Teacher!
   updateAdmin(id: ID!, updateAdmin: UpdateAdminDto!): Admin!
+  updateAttendance(id: ID!, updateAttendance: UpdateAttendanceDto!): Attendance!
   updateCourse(id: ID!, updateCourse: UpdateCourseDto!): Course!
+  updateGroup(id: ID!, updateGroup: UpdateGroupDto!): Group!
+  updateSchedule(id: ID!, updateSchedule: UpdateScheduleDto!): Schedule!
   updateStudent(id: ID!, updateStudent: UpdateStudentDto!): Student!
   updateTeachers(id: ID!, updateTeacher: UpdateTeacherDto!): Teacher!
 }
 
 type Query {
   findAllAdmin: [Admin!]!
+  findAllAttendances: [Attendance!]!
   findAllCourse: [Course!]!
+  findAllGroups: [Group!]!
+  findAllSchedules: [Schedule!]!
   findAllStudent: [Student!]!
   findAllTeachers: [Teacher!]!
   findOneAdmin(id: Float!): Admin!
+  findOneAttendance(id: ID!): Attendance!
   findOneCourse(id: Float!): Course!
+  findOneGroup(id: ID!): Group!
+  findOneSchedule(id: ID!): Schedule!
   findOneStudent(id: Float!): Student!
   findOneTeachers(id: Float!): Teacher!
 }
 
+type Schedule {
+  attendance: [Attendance!]!
+  day_of_week: String!
+  end_time: String!
+  group_id: Group!
+  id: ID!
+  start_time: String!
+}
+
 type Student {
+  attendance: [Attendance!]!
   avatarurl: String!
   datebirth: String!
   email: String!
@@ -104,6 +172,15 @@ type Student {
   last_name: String!
   phone: String!
   refresh_token: String!
+  studentgroup: [Studentgroup!]!
+}
+
+type Studentgroup {
+  group_id: Studentgroup!
+  id: ID!
+  is_active: Boolean!
+  period: String!
+  student_id: Studentgroup!
 }
 
 type Teacher {
@@ -116,6 +193,12 @@ type Teacher {
   phone: String!
   refresh_token: String!
   role: String!
+  teachergroup: [Teachergroup!]!
+}
+
+type Teachergroup {
+  group_id: Teachergroup!
+  teacher_id: Teachergroup!
 }
 
 input UpdateAdminDto {
@@ -127,6 +210,13 @@ input UpdateAdminDto {
   phone: String!
 }
 
+input UpdateAttendanceDto {
+  date: String!
+  schudule_id: Int
+  status: String!
+  student_id: Int
+}
+
 input UpdateCourseDto {
   description: String!
   duration: Float!
@@ -134,6 +224,21 @@ input UpdateCourseDto {
   lessonsinweel: Float!
   price: String!
   title: String!
+}
+
+input UpdateGroupDto {
+  course_id: Int
+  end_date: String!
+  name: String!
+  start_date: String!
+  status: String!
+}
+
+input UpdateScheduleDto {
+  day_of_week: String!
+  end_time: String!
+  group_id: Int
+  start_time: String!
 }
 
 input UpdateStudentDto {

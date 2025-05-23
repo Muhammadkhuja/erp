@@ -1,5 +1,13 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Attendance } from "../../attendances/entities/attendance.entity";
+import { Studentgroup } from "../../studentgroups/entities/studentgroup.entity";
 
 @ObjectType()
 @Entity()
@@ -47,4 +55,12 @@ export class Student {
   @Field()
   @Column()
   avatarurl: string;
+
+  @OneToMany((type) => Attendance, (attendance) => attendance.student_id)
+  @Field((type) => [Attendance])
+  attendance: Attendance[];
+
+  @OneToMany((type) => Studentgroup, (studentgroup) => studentgroup.student_id)
+  @Field((type) => [Studentgroup])
+  studentgroup: Studentgroup[];
 }
