@@ -5,14 +5,14 @@ import { Group } from "../../groups/entities/group.entity";
 @InputType()
 export class UpdateStudentgroupDto {
   @Field((type) => Int, { nullable: true })
-  student_id: Student;
+  student_id?: Student;
 
   @Field((type) => Int, { nullable: true })
-  group_id: Group;
+  group_id?: Group;
 
   @Field()
-  period: string;
+  period?: string;
 
   @Field()
-  is_active: boolean;
+  is_active?: boolean;
 }

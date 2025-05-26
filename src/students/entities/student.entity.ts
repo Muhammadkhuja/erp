@@ -8,6 +8,8 @@ import {
 } from "typeorm";
 import { Attendance } from "../../attendances/entities/attendance.entity";
 import { Studentgroup } from "../../studentgroups/entities/studentgroup.entity";
+import { Homeworksubmission } from "../../homeworksubmissions/entities/homeworksubmission.entity";
+import { Grade } from "../../grades/entities/grade.entity";
 
 @ObjectType()
 @Entity()
@@ -63,4 +65,16 @@ export class Student {
   @OneToMany((type) => Studentgroup, (studentgroup) => studentgroup.student_id)
   @Field((type) => [Studentgroup])
   studentgroup: Studentgroup[];
-}
+
+  @OneToMany(
+    (type) => Homeworksubmission,
+    (homeworksubmission) => homeworksubmission.student_id
+  )
+  @Field((type) => [Homeworksubmission])
+  homeworksubmission: Homeworksubmission[];
+
+  
+    @OneToMany((type) => Grade, (grade) => grade.student_id)
+    @Field((type) => [Grade])
+    grade: Grade[];
+  }

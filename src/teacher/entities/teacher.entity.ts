@@ -1,6 +1,8 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Teachergroup } from "../../teachergroups/entities/teachergroup.entity";
+import { Homework } from "../../homeworks/entities/homework.entity";
+import { Grade } from "../../grades/entities/grade.entity";
 
 @ObjectType()
 @Entity()
@@ -41,7 +43,15 @@ export class Teacher {
   @Column({ nullable: true })
   refresh_token: string;
 
-    @OneToMany((type) => Teachergroup, (teachergroup) => teachergroup.teacher_id)
-    @Field((type) => [Teachergroup])
-    teachergroup: Teachergroup[];
+  @OneToMany((type) => Teachergroup, (teachergroup) => teachergroup.teacher_id)
+  @Field((type) => [Teachergroup])
+  teachergroup: Teachergroup[];
+
+  @OneToMany((type) => Homework, (homeworks) => homeworks.teacher_id)
+  @Field((type) => [Homework])
+  homeworks: Homework[];
+
+  @OneToMany((type) => Grade, (grade) => grade.teacher_id)
+  @Field((type) => [Grade])
+  grade: Grade[];
 }

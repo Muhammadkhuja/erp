@@ -3,20 +3,20 @@ import { Field, InputType } from "@nestjs/graphql";
 @InputType()
 export class UpdateCourseDto {
   @Field()
-  title: string;
+  title?: string;
 
   @Field()
-  description: string;
+  description?: string;
 
   @Field()
-  price: string;
+  price?: string;
 
   @Field()
-  duration: number;
+  duration?: number;
 
   @Field()
-  lessonsinweel: number;
+  lessonsinweel?: number;
 
   @Field()
-  lessonduration: number;
+  lessonduration?: number;
 }

@@ -11,6 +11,7 @@ import { Course } from "../../courses/entities/course.entity";
 import { Schedule } from "../../schedules/entities/schedule.entity";
 import { Teachergroup } from "../../teachergroups/entities/teachergroup.entity";
 import { Studentgroup } from "../../studentgroups/entities/studentgroup.entity";
+import { Homework } from "../../homeworks/entities/homework.entity";
 
 @ObjectType()
 @Entity()
@@ -47,8 +48,11 @@ export class Group {
   @Field((type) => [Teachergroup])
   teachergroup: Teachergroup[];
 
-  
-    @OneToMany((type) => Studentgroup, (studentgroup) => studentgroup.group_id)
-    @Field((type) => [Studentgroup])
-    studentgroup: Studentgroup[];
+  @OneToMany((type) => Studentgroup, (studentgroup) => studentgroup.group_id)
+  @Field((type) => [Studentgroup])
+  studentgroup: Studentgroup[];
+
+  @OneToMany((type) => Homework, (homeworks) => homeworks.group_id)
+  @Field((type) => [Homework])
+  homeworks: Homework[];
 }
